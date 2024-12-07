@@ -1,115 +1,116 @@
-# HibernateDemo
-CRUD Operations example Using Hibernate
+# Department Hibernate Criteria Query Language Workspace
 
+## Overview
 
+This workspace is designed to explore and implement *Hibernate Criteria Query Language (HCQL)* for managing and querying data in the Department entity. HCQL provides a programmatic, type-safe, and dynamic way to construct queries, making it ideal for handling complex data retrieval tasks.
 
-# Overview
-Hibernate an open source Java persistence framework project. Perform powerful object relational mapping and query databases using HQL and SQL. [ Read more ](http://hibernate.org/).
+## Features
 
-## Tools & technologies used 
-1.	Java 1.8
-2.	Maven 3.2.
-3.	Hibernate 5.x
-4.	Mysql 5
-5.	Eclipse
+- *Dynamic Query Building*: Define flexible queries without hardcoding SQL.
+- *Filtering and Sorting*: Apply conditions and sort results based on department attributes.
+- *Projections*: Retrieve specific columns instead of the entire entity.
+- *Pagination*: Handle large datasets efficiently by implementing pagination.
+- *Type Safety*: Leverage type-safe queries for better maintainability and error reduction.
 
-## Here are the steps required :
-* Add Hibernate dependency and MySQL dependency in pom.xml
-* Create Hibernate Configuration file 
-* Create Entity Class
-* Create Hibernate Utility Class
-* execute CRUD methods
+## Prerequisites
 
+- Java Development Kit (JDK) 8 or later.
+- Hibernate ORM framework (version 5 or later).
+- A relational database (e.g., MySQL, PostgreSQL).
+- Maven or Gradle for dependency management.
 
-####	Dependencies (POM.xml)
-```xml
-   <dependency>
-     <groupId>org.hibernate</groupId>
-     <artifactId>hibernate-core</artifactId>
-     <version>4.3.10.Final</version>
-    </dependency>
-    <dependency>
-       <groupId>org.hibernate</groupId>
-       <artifactId>hibernate-search-orm</artifactId>
-       <version>5.3.0.Final</version>
-    </dependency>
-<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+## Key Dependencies
+
+Add the following dependencies to your pom.xml or build.gradle file:
+
+xml
 <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.16</version>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.x.x</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.x.x</version>
 </dependency>
 
-```
 
-#### Add the configuration file hibernate.cfg.xml
-The hibernate.cfg.xml file should be in root directory of the classpath of your project. If you using Maven then make sure it should be like **src > resources > hibernate.cfg.xml**.
+## Setup Instructions
 
-####	Create entity Book class
-```java
-@Entity
-@Table(name="BOOK")
-public class Book implements Serializable {
+1. *Configure Hibernate*:  
+   Update the hibernate.cfg.xml or application.properties with your database connection details.
 
-	
-	@Id
-	 @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	private String title;
-	
-	private String author;
-	private double price;
-	
-	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getAuthor() {
-		return author;
-	}
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-	public double getPrice() {
-		return price;
-	}
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	
+2. *Create the Department Entity*:  
+   Define the Department class and annotate it with Hibernate mappings.
 
-	
-	
-	
-}
+   java
+   @Entity
+   @Table(name = "department")
+   public class Department {
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       private Long id;
 
-```
+       @Column(name = "name")
+       private String name;
 
-####	let’s create a DAO class BookDAO:
-```java
-   public void saveBook(String title,String author,double price){
-      
-    }
-	
-    public List<Book> getBooks(){
-   
-    }
-	
-    
-    public int updateBook(Book b){
-   
+       @Column(name = "location")
+       private String location;
+
+       // Getters and Setters
    }
-    
-    public int deleteBook(int id) {
-    
-    }
-```	
+   
+
+3. *Implement Criteria Queries*:  
+   Use the Hibernate CriteriaBuilder and CriteriaQuery classes to build queries.
+
+   Example: Retrieve all departments in a specific location.
+
+   java
+   CriteriaBuilder cb = session.getCriteriaBuilder();
+   CriteriaQuery<Department> cq = cb.createQuery(Department.class);
+   Root<Department> root = cq.from(Department.class);
+   cq.select(root).where(cb.equal(root.get("location"), "New York"));
+   List<Department> departments = session.createQuery(cq).getResultList();
+   
+
+4. *Test the Queries*:  
+   Use a testing framework or a simple main method to validate your criteria queries.
+
+## Example Use Cases
+
+1. Fetch all departments sorted by name.
+2. Retrieve departments located in a specific region.
+3. Get the count of departments in each location.
+4. Perform advanced filtering using multiple conditions.
+
+## Repository Structure
+
+
+src/
+├── main/
+│   ├── java/
+│   │   └── com.example.department/
+│   │       ├── entity/
+│   │       │   └── Department.java
+│   │       ├── dao/
+│   │       │   └── DepartmentDao.java
+│   │       └── service/
+│   │           └── DepartmentService.java
+│   └── resources/
+│       ├── hibernate.cfg.xml
+│       └── application.properties
+└── test/
+    └── java/
+        └── com.example.department/
+            └── DepartmentTest.java
+
+
+## Contribution
+
+Feel free to contribute by reporting issues, submitting pull requests, or suggesting enhancements.
+
+---
+
+Enjoy working with Hibernate Criteria Query Language to build robust and efficient queries for your Department workspace!
